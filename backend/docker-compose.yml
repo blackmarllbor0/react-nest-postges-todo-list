@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  db:
+    container_name: react_nest_todo
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    image: postgres
+    env_file:
+      - .env

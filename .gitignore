@@ -1,0 +1,6 @@
+# compiled output
+/backend/dist
+/backend/node_modules
+
+# env files
+/backend/.env
