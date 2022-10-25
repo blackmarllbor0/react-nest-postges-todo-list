@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { FindOneParams, FindOneParamsByName } from 'src/utils/find-one-param';
 import { Case } from './case.entity';
 import { CaseService } from './case.service';
 import { CreateCaseDto } from './dto/create-case.dto';
@@ -32,13 +33,15 @@ export class CaseController {
 
   @HttpCode(HttpStatus.OK)
   @Get('getCaseById/:id')
-  public async getCaseById(@Param('id') id: number): Promise<Case> {
+  public async getCaseById(@Param() { id }: FindOneParams): Promise<Case> {
     return this.caseService.getCaseById(id);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('getCaseByName/:name')
-  public async getCaseByName(@Param('name') name: string): Promise<Case> {
+  public async getCaseByName(
+    @Param() { name }: FindOneParamsByName,
+  ): Promise<Case> {
     return this.caseService.getCaseByName(name);
   }
 }

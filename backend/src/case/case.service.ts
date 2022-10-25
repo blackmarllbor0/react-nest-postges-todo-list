@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Case } from './case.entity';
 import { CreateCaseDto } from './dto/create-case.dto';
+import { CaseNotFoundException } from './exceptions/case-not-found.filter';
 
 @Injectable()
 export class CaseService {
@@ -47,10 +48,7 @@ export class CaseService {
   public async getCaseById(id: number): Promise<Case> {
     const post = await this.caseRepository.findOne({ where: { id } });
     if (post) return post;
-    throw new HttpException(
-      'Case with this id does not exist',
-      HttpStatus.NOT_FOUND,
-    );
+    throw new CaseNotFoundException('id');
   }
 
   /**
@@ -61,9 +59,6 @@ export class CaseService {
   public async getCaseByName(name: string): Promise<Case> {
     const post = await this.caseRepository.findOne({ where: { name } });
     if (post) return post;
-    throw new HttpException(
-      'Case with this name does not exist',
-      HttpStatus.NOT_FOUND,
-    );
+    throw new CaseNotFoundException('name');
   }
 }

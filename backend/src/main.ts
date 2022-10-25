@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app/app.module';
@@ -9,6 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('todo');
   app.use(cookieParser());
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(PORT, () => {
     logger.log(`The server is runnig on port http://localhost:${PORT}`);
   });

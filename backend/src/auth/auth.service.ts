@@ -6,6 +6,7 @@ import { PostgresErrorCode } from 'src/database/postgres.error-code';
 import { User } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
 import { RegisterDto } from './dto/register.dto';
+import { AuthorizationExecpion } from './exception/authorization.filter';
 import { TokenPayload } from './interfaces/token-payload.interface';
 
 @Injectable()
@@ -64,10 +65,7 @@ export class AuthService {
       user.password = undefined;
       return user;
     } catch (error) {
-      throw new HttpException(
-        'Wrong credentials provided',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new AuthorizationExecpion();
     }
   }
 
@@ -85,10 +83,7 @@ export class AuthService {
   ): Promise<void> {
     const isPasswordMatching = await compare(plainTextPass, hashPass);
     if (!isPasswordMatching) {
-      throw new HttpException(
-        'Wrong credentials provided',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new AuthorizationExecpion();
     }
   }
 
@@ -105,6 +100,10 @@ export class AuthService {
     )}`;
   }
 
+  /**
+   * clears the cookie
+   * @returns logout
+   */
   public getCookieForLogOut(): string {
     return `Authentication=;HttpOnly;Path=/;Max-Age=0`;
   }
