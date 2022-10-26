@@ -3,11 +3,11 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('cases')
 export class Case {
   @PrimaryGeneratedColumn()
-  id: number;
+  public id: number;
 
   @Column({ unique: true })
-  name: string;
+  public name: string;
 
   @Column()
-  description: string;
+  public description: string;
 }
