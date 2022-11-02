@@ -8,7 +8,6 @@ import {
   Post,
   Req,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { User } from 'src/user/user.entity';
@@ -23,7 +22,6 @@ import { RequestWithUser } from './interfaces/user-request.interface';
  * @file src/auth/auth.service.ts
  */
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

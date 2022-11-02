@@ -1,9 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { Case } from './case.entity';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { CaseNotFoundException } from './exceptions/case-not-found.filter';
+import { UpdateCaseDto } from './dto/update-case.dto';
 
 @Injectable()
 export class CaseService {
@@ -17,7 +19,7 @@ export class CaseService {
    * @returns Or a new case, or an error if there
    * are already cases with what name
    */
-  public async create(dto: CreateCaseDto): Promise<Case> {
+  public async create(dto: CreateCaseDto, user: User): Promise<Case> {
     const post = await this.caseRepository.findOne({
       where: { name: dto.name },
     });
@@ -27,7 +29,7 @@ export class CaseService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    return await this.caseRepository.save(dto);
+    return await this.caseRepository.save({ ...dto, author: user });
   }
 
   /**
@@ -35,7 +37,7 @@ export class CaseService {
    * @returns found cases or 404 error
    */
   public async getAllCases(): Promise<Case[]> {
-    const cases = await this.caseRepository.find();
+    const cases = await this.caseRepository.find({ relations: ['author'] });
     if (cases.length) return cases;
     throw new HttpException('No cases found', HttpStatus.NOT_FOUND);
   }
@@ -46,7 +48,10 @@ export class CaseService {
    * @returns found case or 404 error
    */
   public async getCaseById(id: number): Promise<Case> {
-    const post = await this.caseRepository.findOne({ where: { id } });
+    const post = await this.caseRepository.findOne({
+      where: { id },
+      relations: ['author'],
+    });
     if (post) return post;
     throw new CaseNotFoundException('id');
   }
@@ -60,5 +65,17 @@ export class CaseService {
     const post = await this.caseRepository.findOne({ where: { name } });
     if (post) return post;
     throw new CaseNotFoundException('name');
+  }
+
+  public async updateCase(id: number, post: UpdateCaseDto): Promise<Case[]> {
+    await this.caseRepository.update(id, post);
+    const updatePost = await this.caseRepository.find({
+      where: { id },
+      relations: ['author'],
+    });
+    if (updatePost) {
+      return updatePost;
+    }
+    throw new CaseNotFoundException('id');
   }
 }
