@@ -1,4 +1,4 @@
-import { Case } from 'src/case/case.entity';
+import { Case } from '../case/case.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

@@ -24,7 +24,7 @@ export class CategoryService {
     throw new CategoryNotFoundException();
   }
 
-  public async updateCategorya(
+  public async updateCategory(
     id: number,
     category: UpdateCategoryDto,
   ): Promise<Category> {

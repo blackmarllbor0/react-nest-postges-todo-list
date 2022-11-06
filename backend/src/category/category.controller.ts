@@ -6,7 +6,6 @@ import {
   HttpStatus,
   Param,
   Patch,
-  Put,
 } from '@nestjs/common';
 import { FindOneParams } from 'src/utils/find-one-param';
 import { Category } from './category.entity';
@@ -32,10 +31,10 @@ export class CategoryController {
   }
 
   @Patch('updateCategory/:id')
-  public async updateCategorya(
+  public async updateCategory(
     @Param() { id }: FindOneParams,
     @Body() dto: UpdateCategoryDto,
   ): Promise<Category> {
-    return this.categoryService.updateCategorya(id, dto);
+    return this.categoryService.updateCategory(id, dto);
   }
 }

@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Case } from 'src/case/case.entity';
+import { Case } from '../case/case.entity';
 import {
   Column,
   Entity,
